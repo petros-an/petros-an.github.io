@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <title>Pizza Calculator</title>
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <!-- <link rel="icon" href="./favicon.ico" type="image/x-icon"> -->
+
+
+  </head>
+  <body>
+
+
+    <main style="text-align:center;">
+
+
+        <h1>Pizza Calculator</h1>  
+
+        <div>
+
+          <div class="variable_input">
+            <label for="n_pizzas">Number of pizzas</label>
+            <input id="n_pizzas" name="n_pizzas" value="3"> 
+          </div>
+  
+          <div class="variable_input">
+            <label for="pizza_size">Pizza size (grams)</label>
+            <input id="pizza_size" name="pizza_size" value="250"> 
+          </div>
+
+          <div class="variable_input">
+            <label for="hydration_percentage">Hydration Percentage</label>
+            <input id="hydration_percentage" name="hydration_percentage" value="70"> 
+          </div>
+  
+          <div class="variable_input">
+            <label for="salt_percentage">Salt %</label>
+            <input id="salt_percentage" name="salt_percentage" value="2.5"> 
+          </div>
+  
+          <div class="variable_input">
+            <label for="sourdough_percentage">Sourdough Percentage</label>
+            <input id="sourdough_percentage" name="sourdough_percentage" value="25"> 
+          </div>
+
+          <button id="calculate" onclick="calculatePizza()">
+            Calculate
+          </button>
+
+        </div>
+
+        <div id="results" hidden="true">
+          <p>Sourdough: <span id="sourdough_result"></span> </p>
+          <p>Flour: <span id="flour_result"></span> </p>
+          <p>Water: <span id="water_result"></span> </p>
+          <p>Salt: <span id="salt_result"></span> </p>
+
+        </div>
+
+    </main>
+
+  </body>
+
+  <script>
+    function calculatePizza() {
+
+      number_of_pizzas = parseFloat(document.getElementById('n_pizzas').value)
+
+      pizza_size = parseFloat(document.getElementById('pizza_size').value)
+
+      salt_percentage = parseFloat(document.getElementById('salt_percentage').value)
+      salt_factor = salt_percentage / 100
+
+      hydration_percentage = parseFloat(document.getElementById('hydration_percentage').value)
+      hydration_factor = hydration_percentage / 100
+
+      sourdough_percentage = parseFloat(document.getElementById('sourdough_percentage').value)
+      sourdough_factor = sourdough_percentage / 100
+
+      base_flour = number_of_pizzas * pizza_size / ( 1 + hydration_factor)
+      base_water = base_flour * hydration_factor
+
+      sourdough_weight = sourdough_factor * base_flour
+      sourdough_flour = sourdough_weight / 2
+      sourdough_water = sourdough_weight / 2
+
+      net_flour = Math.round(base_flour - sourdough_flour)
+      net_water = Math.round(base_water - sourdough_water)
+      net_sourdough = Math.round(sourdough_weight)
+      net_salt = Math.round(base_flour * salt_factor)
+
+      
+      console.log(net_flour, net_water, net_salt, net_sourdough)
+
+      document.getElementById('sourdough_result').innerHTML = net_sourdough
+      document.getElementById('flour_result').innerHTML = net_flour
+      document.getElementById('water_result').innerHTML = net_water
+      document.getElementById('salt_result').innerHTML = net_salt
+
+      document.getElementById('results').hidden = false
+
+
+    }
+
+  </script>
+</html>
