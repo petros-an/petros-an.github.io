@@ -2,60 +2,121 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pizza Calculator</title>
-    <!-- <link rel="stylesheet" href="./style.css"> -->
-    <!-- <link rel="icon" href="./favicon.ico" type="image/x-icon"> -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>">
+
+    <style>
+      .variable {
+        height: 40px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      .variable input {
+        width: 30px;
+        border-radius: 2px;
+        border: 1px solid black;
+        text-align: center;
+
+      }
+
+      #main {
+        text-align: center;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 5vh;
+        font-size: 130%;
+
+      }
+
+      #main h1 {
+        border: 2px solid black;
+      }
+
+
+      #inputs {
+        border: 2px solid black;
+        padding: 10px;
+        margin-left: auto;
+        
+      }
+
+      
+
+
+      #calculate {
+        height: 3vh;
+        font-weight: bolder;
+        border: 1px solid black;
+        border-radius: 2px;
+        margin-bottom: 10px;
+      }
+
+      #results {
+        border: 2px solid black;
+        margin-left: auto;
+        margin-top: 20px;
+
+      }
+
+    </style>
+    
 
 
   </head>
   <body>
 
 
-    <main style="text-align:center;">
+    <main id="main">
 
 
         <h1>Pizza Calculator</h1>  
 
-        <div>
+        <div id="inputs">
 
-          <div class="variable_input">
+          <div class="variable">
             <label for="n_pizzas">Number of pizzas</label>
             <input id="n_pizzas" name="n_pizzas" value="3"> 
           </div>
   
-          <div class="variable_input">
+          <div class="variable">
             <label for="pizza_size">Pizza size (grams)</label>
             <input id="pizza_size" name="pizza_size" value="250"> 
           </div>
 
-          <div class="variable_input">
-            <label for="hydration_percentage">Hydration Percentage</label>
+          <div class="variable">
+            <label for="hydration_percentage">Hydration %</label>
             <input id="hydration_percentage" name="hydration_percentage" value="70"> 
           </div>
   
-          <div class="variable_input">
+          <div class="variable">
             <label for="salt_percentage">Salt %</label>
             <input id="salt_percentage" name="salt_percentage" value="2.5"> 
           </div>
   
-          <div class="variable_input">
-            <label for="sourdough_percentage">Sourdough Percentage</label>
+          <div class="variable">
+            <label for="sourdough_percentage">Sourdough %</label>
             <input id="sourdough_percentage" name="sourdough_percentage" value="25"> 
           </div>
 
           <button id="calculate" onclick="calculatePizza()">
-            Calculate
+            🍕 Calculate
           </button>
 
         </div>
 
         <div id="results" hidden="true">
-          <p>Sourdough: <span id="sourdough_result"></span> </p>
-          <p>Flour: <span id="flour_result"></span> </p>
-          <p>Water: <span id="water_result"></span> </p>
-          <p>Salt: <span id="salt_result"></span> </p>
+          <h2>
+            Results
+          </h2>
+
+          <p><u>Sourdough</u>: <span id="sourdough_result"></span>g</p>
+          <p><u>Flour</u>: <span id="flour_result"></span>g</p>
+          <p><u>Water</u>: <span id="water_result"></span>g</p>
+          <p><u>Salt</u>: <span id="salt_result"></span>g</p>
 
         </div>
 
