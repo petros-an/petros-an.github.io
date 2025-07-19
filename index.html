@@ -62,6 +62,19 @@
 
       }
 
+
+      .flour_input {
+        width: 50px;
+      }
+
+      .flour_split_item {
+        margin-top: 1vh;
+      }
+
+      #custom_flour_form_submit {
+        margin-top: 1vh;
+      
+
     </style>
     
 
@@ -101,7 +114,7 @@
             <label for="sourdough_percentage">Sourdough %</label>
             <input id="sourdough_percentage" name="sourdough_percentage" value="25"> 
           </div>
-
+   
           <button id="calculate" onclick="calculatePizza()">
             🍕 Calculate
           </button>
@@ -114,7 +127,54 @@
           </h2>
 
           <p><u>Sourdough</u>: <span id="sourdough_result"></span>g</p>
-          <p><u>Flour</u>: <span id="flour_result"></span>g</p>
+          <p><u>Flour</u>: <span id="flour_result"></span>g <button id="custom_flour_split" onclick="toggleFlourSplit()">Split</button></p> 
+
+          <div id="custom_flour_form" class="flour_split_item" hidden="true"> 
+            <hr style="width: 100px">
+
+            <div> 
+              <label for="flour1_name">Name:</label>
+              <input id="flour1_name" class="flour_input" name="flour1_name" value="flour 1"> 
+            </div>
+
+            <div class="flour_split_item" >
+              <label for="flour1_name">%:</label>
+
+              <input id="flour1_percentage" class="flour_input" name="flour1_percentage" value="25"> 
+
+            </div>
+
+            <hr style="width: 100px">
+
+            <div class="flour_split_item"> 
+              <label for="flour2_name">Name:</label>
+              <input id="flour2_name" class="flour_input" name="flour 2" value="flour 2"> 
+            </div>
+
+            <div class="flour_split_item">
+              <label for="flour2_name">%:</label>
+
+              <input id="flour2_percentage" class="flour_input" name="flour2_percentage" value="75"> 
+
+            </div>
+
+            <hr style="width: 100px">
+
+            <button id="custom_flour_form_submit" onclick="calculateFlourSplit()">Go</button>
+
+          </div>
+
+          <div id="custom_flour_results" hidden="true"> 
+
+            <p><span id="flour_1_result_name"></span>: <span id="flour_1_result"></span>g</p>
+
+            <p><span id="flour_2_result_name"></span>: <span id="flour_2_result"></span>g</p>
+
+
+          </div>
+
+
+
           <p><u>Water</u>: <span id="water_result"></span>g</p>
           <p><u>Salt</u>: <span id="salt_result"></span>g</p>
 
@@ -162,8 +222,42 @@
 
       document.getElementById('results').hidden = false
 
+      window.localStorage['flour_result'] = net_flour
+
 
     }
+
+
+    function toggleFlourSplit() {
+      form = document.getElementById('custom_flour_form')
+      form.hidden = !form.hidden
+    }
+
+    function calculateFlourSplit() {
+      flour1Name = document.getElementById('flour1_name').value
+      flour1Percentage = parseFloat(document.getElementById('flour1_percentage').value)
+
+      flour2Name = document.getElementById('flour2_name').value
+      flour2Percentage = parseFloat(document.getElementById('flour2_percentage').value)
+
+      netFlour = window.localStorage['flour_result']
+
+      flour1 = Math.round(netFlour * flour1Percentage / 100)
+      flour2 = Math.round(netFlour * flour2Percentage / 100)
+
+      console.log(netFlour, flour1Percentage, flour2Percentage)
+
+      document.getElementById('flour_1_result_name').innerHTML = flour1Name
+      document.getElementById('flour_1_result').innerHTML = flour1
+      document.getElementById('flour_2_result_name').innerHTML = flour2Name
+      document.getElementById('flour_2_result').innerHTML = flour2
+
+      document.getElementById('custom_flour_results').hidden = false
+
+
+    }
+
+
 
   </script>
 </html>
