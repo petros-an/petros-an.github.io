@@ -1,263 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Pizza Calculator</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍕</text></svg>">
-
-    <style>
-      .variable {
-        height: 40px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-
-      .variable input {
-        width: 30px;
-        border-radius: 2px;
-        border: 1px solid black;
-        text-align: center;
-
-      }
-
-      #main {
-        text-align: center;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 5vh;
-        font-size: 130%;
-
-      }
-
-      #main h1 {
-        border: 2px solid black;
-      }
-
-
-      #inputs {
-        border: 2px solid black;
-        padding: 10px;
-        margin-left: auto;
-        
-      }
-
-      
-
-
-      #calculate {
-        height: 3vh;
-        font-weight: bolder;
-        border: 1px solid black;
-        border-radius: 2px;
-        margin-bottom: 10px;
-      }
-
-      #results {
-        border: 2px solid black;
-        margin-left: auto;
-        margin-top: 20px;
-
-      }
-
-
-      .flour_input {
-        width: 50px;
-      }
-
-      .flour_split_item {
-        margin-top: 1vh;
-      }
-
-      #custom_flour_form_submit {
-        margin-top: 1vh;
-      
-
-    </style>
-    
-
-
-  </head>
-  <body>
-
-
-    <main id="main">
-
-
-        <h1>Pizza Calculator</h1>  
-
-        <div id="inputs">
-
-          <div class="variable">
-            <label for="n_pizzas">Number of pizzas</label>
-            <input id="n_pizzas" name="n_pizzas" value="3"> 
-          </div>
-  
-          <div class="variable">
-            <label for="pizza_size">Pizza size (grams)</label>
-            <input id="pizza_size" name="pizza_size" value="250"> 
-          </div>
-
-          <div class="variable">
-            <label for="hydration_percentage">Hydration %</label>
-            <input id="hydration_percentage" name="hydration_percentage" value="70"> 
-          </div>
-  
-          <div class="variable">
-            <label for="salt_percentage">Salt %</label>
-            <input id="salt_percentage" name="salt_percentage" value="2.5"> 
-          </div>
-  
-          <div class="variable">
-            <label for="sourdough_percentage">Sourdough %</label>
-            <input id="sourdough_percentage" name="sourdough_percentage" value="25"> 
-          </div>
-   
-          <button id="calculate" onclick="calculatePizza()">
-            🍕 Calculate
-          </button>
-
-        </div>
-
-        <div id="results" hidden="true">
-          <h2>
-            Results
-          </h2>
-
-          <p><u>Sourdough</u>: <span id="sourdough_result"></span>g</p>
-          <p><u>Flour</u>: <span id="flour_result"></span>g <button id="custom_flour_split" onclick="toggleFlourSplit()">Split</button></p> 
-
-          <div id="custom_flour_form" class="flour_split_item" hidden="true"> 
-            <hr style="width: 100px">
-
-            <div> 
-              <label for="flour1_name">Name:</label>
-              <input id="flour1_name" class="flour_input" name="flour1_name" value="flour 1"> 
-            </div>
-
-            <div class="flour_split_item" >
-              <label for="flour1_name">%:</label>
-
-              <input id="flour1_percentage" class="flour_input" name="flour1_percentage" value="25"> 
-
-            </div>
-
-            <hr style="width: 100px">
-
-            <div class="flour_split_item"> 
-              <label for="flour2_name">Name:</label>
-              <input id="flour2_name" class="flour_input" name="flour 2" value="flour 2"> 
-            </div>
-
-            <div class="flour_split_item">
-              <label for="flour2_name">%:</label>
-
-              <input id="flour2_percentage" class="flour_input" name="flour2_percentage" value="75"> 
-
-            </div>
-
-            <hr style="width: 100px">
-
-            <button id="custom_flour_form_submit" onclick="calculateFlourSplit()">Go</button>
-
-          </div>
-
-          <div id="custom_flour_results" hidden="true"> 
-
-            <p><span id="flour_1_result_name"></span>: <span id="flour_1_result"></span>g</p>
-
-            <p><span id="flour_2_result_name"></span>: <span id="flour_2_result"></span>g</p>
-
-
-          </div>
-
-
-
-          <p><u>Water</u>: <span id="water_result"></span>g</p>
-          <p><u>Salt</u>: <span id="salt_result"></span>g</p>
-
-        </div>
-
-    </main>
-
-  </body>
-
-  <script>
-    function calculatePizza() {
-
-      number_of_pizzas = parseFloat(document.getElementById('n_pizzas').value)
-
-      pizza_size = parseFloat(document.getElementById('pizza_size').value)
-
-      salt_percentage = parseFloat(document.getElementById('salt_percentage').value)
-      salt_factor = salt_percentage / 100
-
-      hydration_percentage = parseFloat(document.getElementById('hydration_percentage').value)
-      hydration_factor = hydration_percentage / 100
-
-      sourdough_percentage = parseFloat(document.getElementById('sourdough_percentage').value)
-      sourdough_factor = sourdough_percentage / 100
-
-      base_flour = number_of_pizzas * pizza_size / ( 1 + hydration_factor)
-      base_water = base_flour * hydration_factor
-
-      sourdough_weight = sourdough_factor * base_flour
-      sourdough_flour = sourdough_weight / 2
-      sourdough_water = sourdough_weight / 2
-
-      net_flour = Math.round(base_flour - sourdough_flour)
-      net_water = Math.round(base_water - sourdough_water)
-      net_sourdough = Math.round(sourdough_weight)
-      net_salt = Math.round(base_flour * salt_factor)
-
-      
-      console.log(net_flour, net_water, net_salt, net_sourdough)
-
-      document.getElementById('sourdough_result').innerHTML = net_sourdough
-      document.getElementById('flour_result').innerHTML = net_flour
-      document.getElementById('water_result').innerHTML = net_water
-      document.getElementById('salt_result').innerHTML = net_salt
-
-      document.getElementById('results').hidden = false
-
-      window.localStorage['flour_result'] = net_flour
-
-
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizza Dough Calculator</title>
+<style>
+  :root {
+    --bg: #fbf6ef;
+    --card: #ffffff;
+    --ink: #2b2118;
+    --muted: #8a7a6a;
+    --line: #eadfd2;
+    --accent: #c8452c;
+    --accent-dark: #a33520;
+    --accent-soft: #fbe9e4;
+    --basil: #3f7d4e;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 40px 20px 60px; }
+  header { text-align: center; margin-bottom: 28px; }
+  header h1 { margin: 0; font-size: 2.1rem; letter-spacing: -0.02em; }
+  header p { margin: 6px 0 0; color: var(--muted); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 10px rgba(80, 50, 20, 0.05);
+  }
+  .card h2 {
+    margin: 0 0 16px;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+  label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .field { position: relative; }
+  .field .unit { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.9rem; pointer-events: none; }
+  input, select {
+    width: 100%;
+    padding: 10px 12px;
+    font: inherit;
+    font-size: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fffdfa;
+    color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .field input { padding-right: 34px; }
+  input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+  button { font: inherit; cursor: pointer; border: none; border-radius: 10px; transition: background 0.15s, transform 0.05s; }
+  button:active { transform: translateY(1px); }
+  .btn-add {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+    padding: 6px 14px;
+    font-size: 0.9rem;
+  }
+  .btn-add:hover { background: #f6d9d1; }
+  .btn-calc {
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 14px;
+    margin-bottom: 18px;
+  }
+  .btn-calc:hover { background: var(--accent-dark); }
+  .btn-remove {
+    background: transparent;
+    color: var(--muted);
+    width: 36px;
+    height: 40px;
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+  .btn-remove:hover { color: var(--accent); background: var(--accent-soft); }
+
+  .pref-list { display: flex; flex-direction: column; gap: 12px; }
+  .pref {
+    display: grid;
+    grid-template-columns: 1.1fr 1.3fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+    padding: 14px;
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    background: #fffcf8;
+  }
+  @media (max-width: 600px) { .pref { grid-template-columns: 1fr 1fr; } .pref .btn-remove { justify-self: end; } }
+  .pref-title { font-weight: 700; align-self: center; }
+  .custom-hyd[hidden] { display: none; }
+  .empty { color: var(--muted); text-align: center; padding: 10px 0 4px; font-size: 0.95rem; }
+
+  .error {
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    border: 1px solid #f2c6ba;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+  }
+  .error ul { margin: 0; padding-left: 18px; }
+
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 11px 8px; text-align: right; border-bottom: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+  td .sub { display: block; font-size: 0.8rem; color: var(--muted); }
+  tr.total td { font-weight: 800; border-bottom: none; border-top: 2px solid var(--ink); }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+  .stat { background: #fffcf8; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .stat .k { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; }
+  .stat .v { font-size: 1.4rem; font-weight: 800; margin-top: 2px; }
+  @media (max-width: 600px) { .summary { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🍕 Pizza Dough Calculator</h1>
+    <p>Flour &amp; water for your main dough and preferments</p>
+  </header>
+
+  <section class="card">
+    <h2>Dough</h2>
+    <div class="grid">
+      <div>
+        <label for="pizzas">Pizzas</label>
+        <div class="field"><input id="pizzas" type="number" min="1" step="1" value="4"></div>
+      </div>
+      <div>
+        <label for="ballMass">Mass per pizza</label>
+        <div class="field"><input id="ballMass" type="number" min="1" step="1" value="250"><span class="unit">g</span></div>
+      </div>
+      <div>
+        <label for="hydration">Total hydration</label>
+        <div class="field"><input id="hydration" type="number" min="1" step="0.5" value="65"><span class="unit">%</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>
+      Preferments
+      <button class="btn-add" id="addPref" type="button">+ Add</button>
+    </h2>
+    <div class="pref-list" id="prefList"></div>
+    <div class="empty" id="prefEmpty">No preferments — straight dough. Click <strong>+ Add</strong> to add one.</div>
+  </section>
+
+  <button class="btn-calc" id="calc" type="button">Calculate</button>
+
+  <div id="errors"></div>
+  <section class="card" id="results" hidden></section>
+</div>
+
+<template id="prefTemplate">
+  <div class="pref">
+    <div class="pref-title"></div>
+    <div>
+      <label>Share of total flour</label>
+      <div class="field"><input class="pref-ratio" type="number" min="0" max="100" step="1" value="30"><span class="unit">%</span></div>
+    </div>
+    <div>
+      <label>Type / hydration</label>
+      <select class="pref-type">
+        <option value="Biga|50">Biga · 50%</option>
+        <option value="Poolish|100" selected>Poolish · 100%</option>
+        <option value="Sourdough|100">Sourdough · 100%</option>
+        <option value="Custom|">Custom…</option>
+      </select>
+      <div class="field custom-hyd" hidden style="margin-top:8px">
+        <input class="pref-custom" type="number" min="0" step="1" value="80"><span class="unit">%</span>
+      </div>
+    </div>
+    <button class="btn-remove" type="button" title="Remove">×</button>
+  </div>
+</template>
+
+<script>
+  const COLORS = ["#c8452c", "#3f7d4e", "#d99a2b", "#5a6fb0", "#9b5aa8", "#2e9a9a"];
+
+  const prefList = document.getElementById("prefList");
+  const prefEmpty = document.getElementById("prefEmpty");
+  const template = document.getElementById("prefTemplate");
+  const errorsEl = document.getElementById("errors");
+  const resultsEl = document.getElementById("results");
+
+  function renumber() {
+    [...prefList.children].forEach((el, i) => {
+      el.querySelector(".pref-title").textContent = `Preferment ${i + 1}`;
+    });
+    prefEmpty.hidden = prefList.children.length > 0;
+  }
+
+  function addPreferment() {
+    const node = template.content.firstElementChild.cloneNode(true);
+    const select = node.querySelector(".pref-type");
+    const custom = node.querySelector(".custom-hyd");
+    select.addEventListener("change", () => {
+      custom.hidden = !select.value.startsWith("Custom");
+    });
+    node.querySelector(".btn-remove").addEventListener("click", () => {
+      node.remove();
+      renumber();
+    });
+    prefList.appendChild(node);
+    renumber();
+  }
+
+  function readPreferments() {
+    return [...prefList.children].map((el, i) => {
+      const [type, hyd] = el.querySelector(".pref-type").value.split("|");
+      const hydPct = type === "Custom" ? parseFloat(el.querySelector(".pref-custom").value) : parseFloat(hyd);
+      return {
+        name: `${type === "Custom" ? "Preferment" : type} ${i + 1}`,
+        ratio: parseFloat(el.querySelector(".pref-ratio").value) / 100,
+        hydration: hydPct / 100,
+      };
+    });
+  }
+
+  // Closed-form solution of the system:
+  //   F = M / (1 + H),  W = H·F
+  //   F_p = R_p·F,      W_p = H_p·F_p
+  //   F_main = F − ΣF_p, W_main = W − ΣW_p
+  function solve(M, H, prefs) {
+    const F = M / (1 + H);
+    const W = H * F;
+    const components = prefs.map(p => {
+      const flour = p.ratio * F;
+      const water = p.hydration * flour;
+      return { name: p.name, hydration: p.hydration, flour, water };
+    });
+    const flourMain = F - components.reduce((s, c) => s + c.flour, 0);
+    const waterMain = W - components.reduce((s, c) => s + c.water, 0);
+    return {
+      F, W, M,
+      main: { name: "Main dough", flour: flourMain, water: waterMain, hydration: flourMain > 0 ? waterMain / flourMain : NaN },
+      components,
+    };
+  }
+
+  function validate(pizzas, ballMass, H, prefs) {
+    const errs = [];
+    if (!(pizzas > 0)) errs.push("Number of pizzas must be greater than 0.");
+    if (!(ballMass > 0)) errs.push("Mass per pizza must be greater than 0.");
+    if (!(H > 0)) errs.push("Total hydration must be greater than 0%.");
+    prefs.forEach(p => {
+      if (!(p.ratio > 0)) errs.push(`${p.name}: share of flour must be greater than 0%.`);
+      if (!(p.hydration >= 0)) errs.push(`${p.name}: hydration must be 0% or more.`);
+    });
+    if (errs.length) return errs;
+
+    const sumR = prefs.reduce((s, p) => s + p.ratio, 0);
+    const sumRH = prefs.reduce((s, p) => s + p.ratio * p.hydration, 0);
+    if (sumR > 1 + 1e-9) {
+      errs.push(`Preferments use ${fmtPct(sumR)} of the total flour — the sum must be at most 100%.`);
     }
-
-
-    function toggleFlourSplit() {
-      form = document.getElementById('custom_flour_form')
-      form.hidden = !form.hidden
+    if (sumRH > H + 1e-9) {
+      errs.push(`Preferments already contain water equal to ${fmtPct(sumRH)} of the total flour, more than the ${fmtPct(H)} total hydration. Lower the preferment shares/hydrations or raise the total hydration.`);
     }
+    return errs;
+  }
 
-    function calculateFlourSplit() {
-      flour1Name = document.getElementById('flour1_name').value
-      flour1Percentage = parseFloat(document.getElementById('flour1_percentage').value)
+  const fmtG = x => `${x.toFixed(1)} g`;
+  const fmtPct = x => `${(x * 100).toFixed(1).replace(/\.0$/, "")}%`;
 
-      flour2Name = document.getElementById('flour2_name').value
-      flour2Percentage = parseFloat(document.getElementById('flour2_percentage').value)
+  function render(r) {
+    const rows = [r.main, ...r.components];
+    const body = rows.map((c, i) => {
+      const color = i === 0 ? "#2b2118" : COLORS[(i - 1) % COLORS.length];
+      const hyd = isNaN(c.hydration) ? "—" : fmtPct(c.hydration);
+      return `
+        <tr>
+          <td><span class="dot" style="background:${color}"></span>${c.name}
+            <span class="sub">${fmtPct(c.flour / r.F)} of flour · ${hyd} hydration</span></td>
+          <td>${fmtG(c.flour)}</td>
+          <td>${fmtG(c.water)}</td>
+          <td>${fmtG(c.flour + c.water)}</td>
+        </tr>`;
+    }).join("");
 
-      netFlour = window.localStorage['flour_result']
+    resultsEl.innerHTML = `
+      <h2>Results</h2>
+      <div class="summary">
+        <div class="stat"><div class="k">Total flour</div><div class="v">${fmtG(r.F)}</div></div>
+        <div class="stat"><div class="k">Total water</div><div class="v">${fmtG(r.W)}</div></div>
+        <div class="stat"><div class="k">Total dough</div><div class="v">${fmtG(r.M)}</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Component</th><th>Flour</th><th>Water</th><th>Mass</th></tr></thead>
+        <tbody>
+          ${body}
+          <tr class="total">
+            <td>Total</td>
+            <td>${fmtG(r.F)}</td>
+            <td>${fmtG(r.W)}</td>
+            <td>${fmtG(r.M)}</td>
+          </tr>
+        </tbody>
+      </table>`;
+    resultsEl.hidden = false;
+  }
 
-      flour1 = Math.round(netFlour * flour1Percentage / 100)
-      flour2 = Math.round(netFlour * flour2Percentage / 100)
+  function calculate() {
+    const pizzas = parseFloat(document.getElementById("pizzas").value);
+    const ballMass = parseFloat(document.getElementById("ballMass").value);
+    const H = parseFloat(document.getElementById("hydration").value) / 100;
+    const prefs = readPreferments();
 
-      console.log(netFlour, flour1Percentage, flour2Percentage)
-
-      document.getElementById('flour_1_result_name').innerHTML = flour1Name
-      document.getElementById('flour_1_result').innerHTML = flour1
-      document.getElementById('flour_2_result_name').innerHTML = flour2Name
-      document.getElementById('flour_2_result').innerHTML = flour2
-
-      document.getElementById('custom_flour_results').hidden = false
-
-
+    const errs = validate(pizzas, ballMass, H, prefs);
+    if (errs.length) {
+      errorsEl.innerHTML = `<div class="error"><ul>${errs.map(e => `<li>${e}</li>`).join("")}</ul></div>`;
+      resultsEl.hidden = true;
+      return;
     }
+    errorsEl.innerHTML = "";
+    render(solve(pizzas * ballMass, H, prefs));
+  }
 
-
-
-  </script>
+  document.getElementById("addPref").addEventListener("click", addPreferment);
+  document.getElementById("calc").addEventListener("click", calculate);
+  document.addEventListener("keydown", e => { if (e.key === "Enter") calculate(); });
+  renumber();
+</script>
+</body>
 </html>
